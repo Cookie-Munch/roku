@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="CookieMunchDialog" extends="Group">
+    <interface>
+        <field id="consent" type="node" onChange="onConsent" />
+        <field id="title" type="string" value="We value your privacy" onChange="render" />
+        <field id="message" type="string" value="We use cookies and similar technologies to improve your experience. You decide what we use." onChange="render" />
+        <field id="acceptLabel" type="string" value="Allow all" onChange="render" />
+        <field id="declineLabel" type="string" value="Reject all" onChange="render" />
+        <field id="done" type="boolean" alwaysNotify="true" />
+    </interface>
+    <script type="text/brightscript" uri="CookieMunchDialog.brs" />
+    <script type="text/brightscript" uri="CookieMunchCore.brs" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+    <children>
+        <Rectangle id="scrim" width="1920" height="1080" color="0x000000A0" />
+        <Rectangle id="card" width="1100" height="460" translation="[410,310]" color="0x1E1E1EFF" />
+        <Label id="titleLabel" translation="[470,360]" width="980" font="font:LargeBoldSystemFont" color="0xFFFFFFFF" />
+        <Label id="messageLabel" translation="[470,440]" width="980" wrap="true" font="font:MediumSystemFont" color="0xD0D0D0FF" />
+        <Button id="declineButton" translation="[470,620]" minWidth="460" showFocusFootprint="true" />
+        <Button id="acceptButton" translation="[970,620]" minWidth="460" showFocusFootprint="true" />
+    </children>
+</component>

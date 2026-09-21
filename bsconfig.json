@@ -1,0 +1,12 @@
+{
+  "rootDir": ".",
+  "files": [
+    { "src": "sample/manifest", "dest": "manifest" },
+    { "src": "sample/source/**/*", "dest": "source" },
+    { "src": "sample/components/**/*", "dest": "components" },
+    "components/CookieMunch/**/*"
+  ],
+  "createPackage": false,
+  "stagingDir": ".bsc-staging",
+  "retainStagingDir": false
+}

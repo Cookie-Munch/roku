@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Cookie Munch consent client for Roku. One long-lived Task per channel: it restores the
+  stored decision, asks the server which regime applies, and records decisions.
+
+  Set cbid (and apiBase for a non-default origin), then control = "RUN". Write "accept"
+  or "decline" to `command` to record a decision; observe `state` and `consentRequired`.
+-->
+<component name="CookieMunchTask" extends="Task">
+  <interface>
+    <field id="cbid" type="string" />
+    <field id="apiBase" type="string" value="https://api.cookiemunch.net" />
+    <!-- Your signed-in account id, if any, so this decision joins the same person's history. -->
+    <field id="subjectId" type="string" />
+    <field id="command" type="string" alwaysNotify="true" />
+    <field id="state" type="assocarray" />
+    <field id="regulation" type="assocarray" />
+    <field id="consentRequired" type="boolean" value="false" />
+    <field id="ready" type="boolean" value="false" />
+  </interface>
+  <script type="text/brightscript" uri="CookieMunchTask.brs" />
+  <script type="text/brightscript" uri="CookieMunchCore.brs" />
+</component>
