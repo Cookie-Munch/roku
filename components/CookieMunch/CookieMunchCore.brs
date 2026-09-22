@@ -110,6 +110,26 @@ function CM_NowMs() as LongInteger
     return ms& * 1000& + dt.GetMilliseconds()
 end function
 
+' One block of a parsed /config response, or invalid when it is absent or the wrong shape.
+' A server that has not been upgraded simply has no block, which is not an error.
+function CM_ConfigBlock(config as Dynamic, name as String) as Dynamic
+    if config = invalid or type(config) <> "roAssociativeArray" then return invalid
+    block = config[name]
+    if block = invalid or type(block) <> "roAssociativeArray" then return invalid
+    return block
+end function
+
+' A string from the prompt's resolved copy, or the fallback when the server has not
+' answered yet — a prompt that waits for the network is a prompt that does not ask.
+function CM_Text(copy as Dynamic, key as String, fallback as String) as String
+    if copy = invalid or type(copy) <> "roAssociativeArray" then return fallback
+    banner = copy.banner
+    if banner = invalid or type(banner) <> "roAssociativeArray" then return fallback
+    value = banner[key]
+    if CM_IsString(value) and value <> "" then return value
+    return fallback
+end function
+
 function CM_Copy(source as Object) as Object
     out = {}
     for each key in source

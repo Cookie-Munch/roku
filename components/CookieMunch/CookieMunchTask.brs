@@ -18,8 +18,13 @@ sub consentLoop()
     end if
     m.top.state = state
 
-    regulation = fetchRegulation()
+    config = fetchConfig()
+    regulation = CM_ConfigBlock(config, "regulation")
     if regulation <> invalid then m.top.regulation = regulation
+    ' The same call brings back the prompt's words, so the channel never ships forty
+    ' catalogues of its own.
+    copy = CM_ConfigBlock(config, "copy")
+    if copy <> invalid then m.top.copy = copy
     m.top.consentRequired = CM_ShouldPrompt(state, regulation)
     m.top.ready = true
 
@@ -54,13 +59,14 @@ function transfer(url as String) as Object
     return xfer
 end function
 
-' GET /config/:cbid — the server resolves the regime from the IP it sees.
-function fetchRegulation() as Dynamic
-    raw = transfer(m.top.apiBase + "/config/" + m.top.cbid).GetToString()
+' GET /config/:cbid — the server resolves the regime from the IP it sees, and the prompt's
+' words for the language this device reads in.
+function fetchConfig() as Dynamic
+    language = CreateObject("roDeviceInfo").GetCurrentLocale()
+    url = m.top.apiBase + "/config/" + m.top.cbid + "?lang=" + language
+    raw = transfer(url).GetToString()
     if raw = invalid or raw = "" then return invalid
-    config = ParseJson(raw)
-    if config = invalid or type(config.regulation) <> "roAssociativeArray" then return invalid
-    return config.regulation
+    return ParseJson(raw)
 end function
 
 ' POST /api/v1/consent. Never retried inline: the local copy is already saved.

@@ -45,6 +45,16 @@ sub Main()
 
     check("now is a plausible millisecond clock", CM_NowMs() > 1600000000000&)
 
+    ' The prompt's words come from the server, in the viewer's language.
+    config = ParseJson("{""regulation"":{""consentRequired"":true},""copy"":{""language"":""de"",""banner"":{""title"":""Wir respektieren Ihre Privatsphäre"",""acceptAll"":""Alle akzeptieren""}}}")
+    copy = CM_ConfigBlock(config, "copy")
+    check("reads the copy block", copy <> invalid)
+    check("uses the server's words", CM_Text(copy, "acceptAll", "Allow all") = "Alle akzeptieren")
+    check("falls back when a string is missing", CM_Text(copy, "rejectAll", "Reject all") = "Reject all")
+    check("falls back with no copy at all", CM_Text(invalid, "acceptAll", "Allow all") = "Allow all")
+    check("a response without the block is not an error", CM_ConfigBlock(ParseJson("{}"), "copy") = invalid)
+    check("still reads the regime alongside it", CM_ConfigBlock(config, "regulation").consentRequired = true)
+
     ' The exact wire body, for the server-side validator to check (see roku-record.test.ts).
     print "RECORD " + FormatJson(known)
     print "ROKU-CORE " + m.passed.ToStr() + "/" + m.total.ToStr()

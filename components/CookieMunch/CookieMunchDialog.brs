@@ -10,10 +10,14 @@ sub init()
 end sub
 
 sub render()
-    m.titleLabel.text = m.top.title
-    m.messageLabel.text = m.top.message
-    m.decline.text = m.top.declineLabel
-    m.accept.text = m.top.acceptLabel
+    ' The server's words for this viewer's language when they have arrived; the field
+    ' defaults otherwise, so the prompt still asks on a first launch with no network.
+    copy = invalid
+    if m.top.consent <> invalid then copy = m.top.consent.copy
+    m.titleLabel.text = CM_Text(copy, "title", m.top.title)
+    m.messageLabel.text = CM_Text(copy, "body", m.top.message)
+    m.decline.text = CM_Text(copy, "rejectAll", m.top.declineLabel)
+    m.accept.text = CM_Text(copy, "acceptAll", m.top.acceptLabel)
 end sub
 
 sub onConsent()
@@ -21,7 +25,10 @@ sub onConsent()
     if consent = invalid then return
     consent.observeField("ready", "refresh")
     consent.observeField("consentRequired", "refresh")
+    ' Re-draw when the words land, which may be after the prompt is already on screen.
+    consent.observeField("copy", "render")
     refresh()
+    render()
 end sub
 
 ' Show while a decision is owed; hand focus to the first choice as it appears, so the
