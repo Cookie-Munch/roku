@@ -11,7 +11,7 @@
   <interface>
     <field id="consent" type="node" onChange="onConsent" />
     <field id="title" type="string" value="We value your privacy" onChange="render" />
-    <field id="message" type="string" value="We use cookies and similar technologies to improve your experience. You decide what we use." onChange="render" />
+    <field id="message" type="string" value="We use cookies. Choose which ones you allow." onChange="render" />
     <field id="acceptLabel" type="string" value="Allow all" onChange="render" />
     <field id="declineLabel" type="string" value="Reject all" onChange="render" />
     <!-- Fires once a decision has been made. -->
